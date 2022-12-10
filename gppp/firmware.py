@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify, abort, Response, request
 from glob import glob
-from gppp import GPPP_FOLDER, FIRMWARES_FOLDER
+from gppp import FIRMWARES_FOLDER
 import os
 bp = Blueprint('firmware', __name__, url_prefix='/api/firmware')
+
 
 def firmwareFileExists(filename: str):
   if filename.startswith('..') or filename.startswith('.'):
@@ -10,6 +11,7 @@ def firmwareFileExists(filename: str):
 
   firmwarePath = os.path.join(FIRMWARES_FOLDER, filename)
   return os.path.exists(firmwarePath)
+
 
 @bp.get('/')
 def getFirmwares():
@@ -20,12 +22,13 @@ def getFirmwares():
   for firmwarePath in firmwarePaths:
     firmwareStat = os.stat(firmwarePath)
     firmwareData.append({
-      'filename': firmwarePath.replace(FIRMWARES_FOLDER + '/', ''),
-      'filesize': firmwareStat.st_size,
-      'created': firmwareStat.st_ctime
+        'filename': firmwarePath.replace(FIRMWARES_FOLDER + '/', ''),
+        'filesize': firmwareStat.st_size,
+        'created': firmwareStat.st_ctime
     })
 
   return jsonify(firmwareData)
+
 
 @bp.post('/')
 def saveFirmware():
@@ -45,12 +48,13 @@ def getFirmware(filename: str):
   firmwareStat = os.stat(firmwarePath)
 
   firmwareData = {
-    'filename': filename,
-    'filesize': firmwareStat.st_size,
-    'created': firmwareStat.st_ctime
+      'filename': filename,
+      'filesize': firmwareStat.st_size,
+      'created': firmwareStat.st_ctime
   }
 
   return jsonify(firmwareData)
+
 
 @bp.delete('/<filename>')
 def deleteFirmware(filename: str):
