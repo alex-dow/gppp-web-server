@@ -1,2 +1,3 @@
-#!/bin/sh
-flask --app gppp --debug run
+#!/bin/bash
+source .venv/bin/activat
+python -m gppp
